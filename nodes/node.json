@@ -3,5 +3,11 @@
     "versions": ["2.2.0"],
     "global": "2.2.0",
     "gems": ["bundler"]
+  },
+  "nginx": {
+    "server_name":"192.168.33.20",
+    "port": "80",
+    "app_dir":"sample",
+    "app_code":"sample"
   }
 }

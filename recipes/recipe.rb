@@ -56,3 +56,14 @@ node["rbenv"]["gems"].each do |gem|
     not_if "source #{RBENV_SCRIPT}; gem list | grep #{gem}"
   end
 end
+
+# nginx install
+package "nginx"
+
+template "/etc/nginx/nginx.conf" do
+  source 'templates/nginx.conf.erb'
+end
+
+service "nginx" do
+  action [:enable, :restart]
+end
