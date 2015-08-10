@@ -4,6 +4,32 @@ execute "yum update" do
   command "yum -y update"
 end
 
+# Create User
+user "create user [#{node['user']['name']}]" do
+  username "#{node['user']['name']}"
+  password "#{node['user']['password']}"
+end
+
+directory "/home/#{node['user']['name']}/.ssh" do
+  owner "#{node['user']['name']}"
+  group "#{node['user']['name']}"
+  mode "700"
+end
+
+file "/home/#{node['user']['name']}/.ssh/authorized_keys" do
+  content "#{node['user']['ssh_key']}"
+  owner "#{node['user']['name']}"
+  group "#{node['user']['name']}"
+  mode "600"
+end
+
+template "/etc/sudoers" do
+  source "templates/sudoers"
+  mode "440"
+  owner "root"
+  group "root"
+end
+
 # rbenv install
 package "epel-release"
 package "gcc"
