@@ -1,4 +1,7 @@
 # itamae_rails
+## Introduction
+Provisioning to Server used Itamae
+
 ## Usage
 Bundle install
 
@@ -6,7 +9,7 @@ Bundle install
 $ bundle install
 ```
 
-Copy and rename node/node.json.sample
+Copy and rename node.json.sample to node.json
 
 ```
 $ cp node/node.json.sample node/node.json
@@ -26,7 +29,7 @@ Created password rewrite node.json and set ssh key
 
 ```json
  "user": {
-    "name": "www",
+    "name": "sample",
     "password": "sample", # rewrite
     "ssh_key": "sample"   # Set your ssh key
   }
@@ -35,5 +38,5 @@ Created password rewrite node.json and set ssh key
 Execute provision
 
 ```
-bundle exec itamae ssh --vagrant -j nodes/node.json recipes/recipe.rb
+bundle exec itamae ssh -h [IP Address] -i [SSH Private Key file] -j nodes/node.json recipes/recipe.rb
 ```
