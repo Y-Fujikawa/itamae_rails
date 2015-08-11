@@ -87,9 +87,28 @@ end
 package "nginx"
 
 template "/etc/nginx/nginx.conf" do
-  source 'templates/nginx.conf.erb'
+  source "templates/nginx.conf.erb"
 end
 
 service "nginx" do
   action [:enable, :restart]
+end
+
+# change sshd_config
+
+# change iptables
+# need to restart manually when modifying /etc/sysconfig/iptables
+IPTABLES_FILE = "/etc/sysconfig/iptables"
+execute "move iptables original" do
+  user "root"
+  command "cp #{IPTABLES_FILE} #{IPTABLES_FILE}.org"
+end
+
+template "#{IPTABLES_FILE}" do
+  source "templates/iptables.erb"
+  mode 600
+end
+
+service "#{IPTABLES_FILE}" do
+  subscribes :restart, "template[#{IPTABLES_FILE}]"
 end

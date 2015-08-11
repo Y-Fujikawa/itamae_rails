@@ -1,0 +1,17 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+# 自サーバが送信したコネクション開設要求に関連するパケット受信と、接続完了後のパケット受信を許可
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+# pingやtcp, udpの通信結果に使われるプロトコルicmpのパケット受信を許可
+-A INPUT -p icmp -j ACCEPT
+# ループバックを許可
+-A INPUT -i lo -j ACCEPT
+# 新規セッションなのにSYNフラグの立っていないパケットは拒否
+-A INPUT -p tcp -m state --state NEW -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -j DROP
+# SSH
+-A INPUT -p tcp -m state --state NEW -m tcp --dport <%= node['iptables']['ssh']['port'] %> -j ACCEPT
+# HTTP
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+COMMIT
