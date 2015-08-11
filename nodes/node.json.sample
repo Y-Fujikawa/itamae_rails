@@ -1,6 +1,6 @@
 {
   "user": {
-    "name": "www",
+    "name": "sample",
     "password": "sample",
     "ssh_key": "sample"
   },
@@ -15,9 +15,18 @@
     "app_dir": "sample",
     "app_code": "sample"
   },
+  "sshd": {
+    "port": 22,
+    "maxStartups" : 10,
+    "permitRootLogin" : "yes",
+    "rSAAuthentication" : "yes",
+    "pubkeyAuthentication" : "yes",
+    "authorizedKeysFile" : ".ssh/authorized_keys",
+    "passwordAuthentication" : "yes"
+  },
   "iptables": {
     "ssh": {
-      "port": 2222
+      "port": 22
     }
   }
 }

@@ -94,21 +94,34 @@ service "nginx" do
   action [:enable, :restart]
 end
 
-# change sshd_config
+#change sshd_config
+SSHD_CONFIG_FILE = "/etc/ssh/sshd_config"
+execute "move sshd_config original" do
+  command "mv #{SSHD_CONFIG_FILE} #{SSHD_CONFIG_FILE}.org"
+  user "root"
+end
+
+template "#{SSHD_CONFIG_FILE}" do
+  source "templates/sshd_config.erb"
+  mode "600"
+end
+
+service "sshd" do
+  subscribes :restart, "template[#{SSHD_CONFIG_FILE}]"
+end
 
 # change iptables
-# need to restart manually when modifying /etc/sysconfig/iptables
 IPTABLES_FILE = "/etc/sysconfig/iptables"
 execute "move iptables original" do
+  command "mv #{IPTABLES_FILE} #{IPTABLES_FILE}.org"
   user "root"
-  command "cp #{IPTABLES_FILE} #{IPTABLES_FILE}.org"
 end
 
 template "#{IPTABLES_FILE}" do
   source "templates/iptables.erb"
-  mode 600
+  mode "600"
 end
 
-service "#{IPTABLES_FILE}" do
+service "iptables" do
   subscribes :restart, "template[#{IPTABLES_FILE}]"
 end
