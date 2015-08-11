@@ -87,9 +87,41 @@ end
 package "nginx"
 
 template "/etc/nginx/nginx.conf" do
-  source 'templates/nginx.conf.erb'
+  source "templates/nginx.conf.erb"
 end
 
 service "nginx" do
   action [:enable, :restart]
+end
+
+#change sshd_config
+SSHD_CONFIG_FILE = "/etc/ssh/sshd_config"
+execute "move sshd_config original" do
+  command "mv #{SSHD_CONFIG_FILE} #{SSHD_CONFIG_FILE}.org"
+  user "root"
+end
+
+template "#{SSHD_CONFIG_FILE}" do
+  source "templates/sshd_config.erb"
+  mode "600"
+end
+
+service "sshd" do
+  subscribes :restart, "template[#{SSHD_CONFIG_FILE}]"
+end
+
+# change iptables
+IPTABLES_FILE = "/etc/sysconfig/iptables"
+execute "move iptables original" do
+  command "mv #{IPTABLES_FILE} #{IPTABLES_FILE}.org"
+  user "root"
+end
+
+template "#{IPTABLES_FILE}" do
+  source "templates/iptables.erb"
+  mode "600"
+end
+
+service "iptables" do
+  subscribes :restart, "template[#{IPTABLES_FILE}]"
 end
