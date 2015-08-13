@@ -94,7 +94,7 @@ service "nginx" do
   action [:enable, :restart]
 end
 
-#change sshd_config
+# change sshd_config
 SSHD_CONFIG_FILE = "/etc/ssh/sshd_config"
 execute "move sshd_config original" do
   command "mv #{SSHD_CONFIG_FILE} #{SSHD_CONFIG_FILE}.org"
@@ -124,4 +124,32 @@ end
 
 service "iptables" do
   subscribes :restart, "template[#{IPTABLES_FILE}]"
+end
+
+# MySQL install
+execute "yum -y remove mysql*"
+
+execute "delete MySQL" do
+  command "rm -rf /var/lib/mysql"
+  user "root"
+end
+
+%w[mysql mysql-server mysql-devel].each do |pkg|
+  package pkg
+end
+
+execute "create mysql.sock" do
+  command "touch /var/lib/mysql/mysql.sock"
+  user "root"
+  not_if "test -e /var/lib/mysql/mysql.sock"
+end
+
+execute "chmod mysql.sock" do
+  command "chown mysql:mysql /var/lib/mysql/mysql.sock"
+  user "root"
+  not_if "test -e /var/lib/mysql/mysql.sock"
+end
+
+service "mysqld" do
+  action [:enable, :restart]
 end
