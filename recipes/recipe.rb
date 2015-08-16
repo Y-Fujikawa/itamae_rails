@@ -134,7 +134,9 @@ execute "delete MySQL" do
   user "root"
 end
 
-%w[mysql mysql-server mysql-devel].each do |pkg|
+package 'http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm'
+
+%w[mysql-community-server mysql-community-devel].each do |pkg|
   package pkg
 end
 
