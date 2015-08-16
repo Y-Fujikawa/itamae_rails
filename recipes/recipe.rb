@@ -127,14 +127,19 @@ service "iptables" do
 end
 
 # MySQL install
-execute "yum -y remove mysql*"
+execute "yum -y remove mysql*" do
+  not_if "rpm -q mysql-community-release-el6-5"
+end
 
 execute "delete MySQL" do
   command "rm -rf /var/lib/mysql"
   user "root"
+  not_if "rpm -q mysql-community-release-el6-5"
 end
 
-package 'http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm'
+package "http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm" do
+  not_if "rpm -q mysql-community-release-el6-5"
+end
 
 %w[mysql-community-server mysql-community-devel].each do |pkg|
   package pkg
