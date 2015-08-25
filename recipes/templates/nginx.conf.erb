@@ -20,8 +20,8 @@ http {
   sendfile on;
   keepalive_timeout 65;
 
-  upstream app_server {
-    server unix:/var/www/<%= node['nginx']['server_name'] %>/shared/tmp/sockets/unicorn.sock
+  upstream <%= node['nginx']['server_name'] %>; {
+    server unix:/tmp/unicorn.sock
     fail_timeout=0;
   }
 
@@ -43,7 +43,7 @@ http {
       proxy_redirect off;
 
       if (!-f $request_filename) {
-        proxy_pass http://app_server;
+        proxy_pass http://<%= node['nginx']['server_name'] %>;
         break;
       }
     }
