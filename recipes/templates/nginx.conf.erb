@@ -20,7 +20,7 @@ http {
   sendfile on;
   keepalive_timeout 65;
 
-  upstream <%= node['nginx']['server_name'] %>; {
+  upstream <%= node['nginx']['server_name'] %> {
     server unix:/tmp/unicorn.sock
     fail_timeout=0;
   }

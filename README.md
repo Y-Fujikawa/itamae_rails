@@ -37,6 +37,12 @@ Created password rewrite node.json and set ssh key
 
 Execute provision
 
+Host
 ```
 bundle exec itamae ssh -h [IP Address] -i [SSH Private Key file] -j nodes/node.json recipes/recipe.rb
+```
+
+Vagrant
+```
+bundle exec itamae ssh --vagrant -j nodes/node.json recipes/recipe.rb
 ```
