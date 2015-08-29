@@ -28,5 +28,19 @@
     "ssh": {
       "port": 22
     }
+  },
+  "mysql": {
+    "server_root_password": "root_password",
+    "databases": [{
+      "name": "sample",
+      "charset": "utf8",
+      "collate": "utf8_general_ci",
+      "privileges": [{
+        "types": "ALL",
+        "user": "sample",
+        "host": "localhost",
+        "password": "sample"
+      }]
+    }]
   }
 }

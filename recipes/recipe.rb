@@ -160,3 +160,24 @@ end
 service "mysqld" do
   action [:enable, :restart]
 end
+
+template "/etc/mysql_databases.sql" do
+  owner "root"
+  group "root"
+  mode "600"
+  notifies :run, "execute[create databases]", :immediately
+end
+
+require 'shellwords'
+execute "create databases" do
+  if node[:mysql][:server_root_password].empty?
+    password_string = ""
+  else
+    password_string = "-p" + Shellwords.escape(node[:mysql][:server_root_password])
+  end
+
+  cmd = "/bin/cat /etc/mysql_databases.sql | mysql"
+  cmd << " -u root #{password_string}"
+  command cmd
+  action :nothing
+end
