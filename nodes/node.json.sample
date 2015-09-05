@@ -1,4 +1,5 @@
 {
+  "environment": "staging",
   "user": {
     "name": "sample",
     "password": "sample",

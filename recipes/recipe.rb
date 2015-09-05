@@ -126,6 +126,20 @@ service "iptables" do
   subscribes :restart, "template[#{IPTABLES_FILE}]"
 end
 
+# Create init.d process unicorn
+template "/etc/init.d/unicorn" do
+  source "templates/unicorn.erb"
+  user "root"
+  owner "www"
+  group "www"
+  mode "0755"
+end
+
+execute "chkconfig unicorn" do
+  not_if "chkconfig --list | grep unicorn | grep 3:on"
+  command "chkconfig --add unicorn; chkconfig unicorn on"
+end
+
 # MySQL install
 execute "yum -y remove mysql*" do
   not_if "rpm -q mysql-community-release-el6-5"

@@ -1,0 +1,87 @@
+#!/bin/sh
+
+# chkconfig: - 85 15
+# description: start/stop unicorn script.
+# processname: unicorn
+
+# move to project root directory
+NAME="unicorn"
+APP_ROOT_DIR="/var/<%= node['user']['name'] %>/<%= node['nginx']['app_code'] %>/current"
+PID="$APP_ROOT_DIR/tmp/pids/unicorn.pid"
+CONF="$APP_ROOT_DIR/config/unicorn.rb"
+ENVIROMENT=<%= node['environment'] %>
+USER=<%= node['user']['name'] %>
+CMD="bundle exec unicorn -E $ENVIROMENT -c $CONF -D"
+
+start()
+{
+  if [ -e $PID ]; then
+    echo "$NAME already started";
+    exit 1;
+  fi
+  echo "start $NAME";
+  cd $APP_ROOT_DIR
+  $CMD
+}
+
+stop()
+{
+  if [ ! -e $PID ]; then
+    echo "$NAME not started";
+    exit 1;
+  fi
+  echo "stop $NAME";
+  kill -QUIT `cat ${PID}`
+  rm -f $PID
+}
+
+force_stop()
+{
+  if [ ! -e $PID ]; then
+    echo "$NAME not started";
+    exit 1;
+  fi
+  echo "stop $NAME";
+  kill -TERM `cat ${PID}`
+  rm -f $PID
+}
+
+reload()
+{
+  if [ ! -e $PID ]; then
+    echo "$NAME not started";
+    start
+    exit 0;
+  fi
+  echo "reload $NAME";
+  kill -HUP `cat ${PID}`
+}
+
+restart()
+{
+    stop
+    start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  force-stop)
+    force_stop
+    ;;
+  reload)
+    reload
+    ;;
+  restart)
+    restart
+    ;;
+  *)
+    echo "Syntax Error: release [start|stop|force-stop|reload|restart]"
+    ;;
+esac
+
+exit
