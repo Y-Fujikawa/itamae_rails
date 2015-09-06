@@ -1,0 +1,6 @@
+# 監視の実行タイミングを設定
+set daemon 60
+set logfile /var/log/monit.log
+
+# 以下のファイルに監視対象のプロセスを記述していく
+include /etc/monit.d/*
