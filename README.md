@@ -46,3 +46,26 @@ Vagrant
 ```
 bundle exec itamae ssh --vagrant -j nodes/node.json recipes/recipe.rb
 ```
+
+### Test (Vagrant Only)
+Add ssh config
+```
+Host vagrant.local
+  HostName 192.168.33.20
+  Port 22
+  User www
+  IdentityFile ~/.ssh/[SSH Private Key file]
+```
+
+Setting sudo
+```
+vagrant ssh
+
+visudo
+www   ALL=(ALL)       ALL
+```
+
+Run
+```
+SUDO_PASSWORD=[Input Password] rake spec
+```
