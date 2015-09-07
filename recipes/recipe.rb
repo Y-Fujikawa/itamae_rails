@@ -130,8 +130,8 @@ end
 template "/etc/init.d/unicorn" do
   source "templates/unicorn.erb"
   user "root"
-  owner "www"
-  group "www"
+  owner "#{node['user']['name']}"
+  group "#{node['user']['name']}"
   mode "0755"
 end
 
