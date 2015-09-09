@@ -23,8 +23,9 @@ file "/home/#{node['user']['name']}/.ssh/authorized_keys" do
   mode "600"
 end
 
+# Update sudoers
 template "/etc/sudoers" do
-  source "templates/sudoers"
+  source "templates/sudoers.erb"
   mode "440"
   owner "root"
   group "root"
