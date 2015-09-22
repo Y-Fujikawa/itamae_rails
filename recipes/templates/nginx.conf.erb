@@ -67,7 +67,24 @@ http {
       root /var/www/<%= node['nginx']['app_dir'] %>/current/public;
     }
 
-    error_page 500 502 503 504 /50x.html;
+    error_page 503 @503;
+    # Return a 503 error if the maintenance page exists.
+    if (-f /var/www/<%= node['nginx']['app_dir'] %>/shared/public/system/maintenance.html) {
+      return 503;
+    }
+
+    location @503 {
+      # Serve static assets if found.
+      if (-f $request_filename) {
+        break;
+      }
+
+      # Set root to the shared directory.
+      root /var/www/<%= node['nginx']['app_dir'] %>/shared/public;
+      rewrite ^(.*)$ /system/maintenance.html break;
+    }
+
+    error_page 500 502 504 /50x.html;
     location = /50x.html {
       root /var/www/<%= node['nginx']['app_dir'] %>/current/public;
     }
