@@ -69,3 +69,20 @@ Run
 ```
 SUDO_PASSWORD=[Input Password] rake spec
 ```
+
+### Setting Basic Authentication
+```
+cd /etc/nginx
+sudo htpasswd -c .htpasswd sample
+[sudo] password for user:
+New password:
+Re-type new password:
+```
+
+/etc/nginx/nginx.conf  
+Comment in L54-55
+
+Nginx restart
+```
+sudo /etc/init.d/nginx restart
+```
