@@ -6,8 +6,8 @@
     "ssh_key": "sample"
   },
   "rbenv": {
-    "versions": ["2.2.0"],
-    "global": "2.2.0",
+    "versions": ["2.3.0"],
+    "global": "2.3.0",
     "gems": ["bundler"]
   },
   "nginx": {
