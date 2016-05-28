@@ -40,6 +40,7 @@ package "libyaml-devel"
 package "readline-devel"
 package "zlib-devel"
 package "git"
+package "file-devel"
 
 RBENV_DIR = "/usr/local/rbenv"
 RBENV_SCRIPT = "/etc/profile.d/rbenv.sh"
